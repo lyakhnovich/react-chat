@@ -4,10 +4,10 @@ const Search = () => {
   return (
     <div className='search'>
       <div className='searchForm'>
-        <input type='text'/>
+        <input type='text' placeholder='find a user'/>
       </div>
       <div className='userChat'>
-        <img src='' alt=''/>
+        <img src='https://avatars.githubusercontent.com/u/60649315?v=4' alt=''/>
         <div className='userChatInfo'>
           <span>Kek</span>
         </div>
