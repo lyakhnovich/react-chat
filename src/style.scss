@@ -18,13 +18,12 @@
 
 $darkColor: #2f2d52;
 
-
 .formContainer{
-  background-color: #a7bcff;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(90deg, #085078, #85D8CE);
 
   .formWrapper{
     background-color: white;

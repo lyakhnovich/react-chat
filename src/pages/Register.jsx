@@ -3,10 +3,14 @@ import Add from '../img/addAvatar.png'
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import {auth, db, storage} from '../firebase'
+import {auth, db, storage} from '../firebase';
+import {Link, useNavigate} from "react-router-dom";
+
 
 const Register = () => {
   const [err, setErr] = useState(false);
+  const navigate = useNavigate()
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const displayName = e.target[0].value
@@ -16,7 +20,6 @@ const Register = () => {
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(res)
 
       const storageRef = ref(storage, displayName);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -39,20 +42,13 @@ const Register = () => {
             });
 
             await setDoc(doc(db, "userChats", res.user.uid), {});
-
+            navigate('/')
           });
         }
       );
-
-
-
-    } catch (er) {
+    } catch (err) {
       setErr(true);
     }
-
-
-
-
   }
 
   return (
@@ -72,7 +68,7 @@ const Register = () => {
           <button>Sign Up</button>
           {err && <span>something went wrong</span>}
         </form>
-        <p>You do have an account? Log In</p>
+        <p>You do have an account? <Link to='/login'>Log In</Link></p>
       </div>
     </div>
   );
