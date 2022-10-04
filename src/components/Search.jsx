@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {collection, query, where, getDocs, setDoc, updateDoc, serverTimestamp} from "firebase/firestore";
+import {collection, query, where, getDocs, setDoc, updateDoc, serverTimestamp, doc} from "firebase/firestore";
 import {db} from "../firebase";
 import {AuthContext} from "../context/AuthContext";
 
@@ -42,6 +42,15 @@ const Search = () => {
             uid: user.uid,
             displayName: user.displayName,
             photoURL: user.photoURL
+          },
+          [combinedId + '.date']: serverTimestamp()
+        })
+
+        await updateDoc(doc(db, 'userChats', user.uid), {
+          [combinedId + '.userInfo']: {
+            uid: currentUser.uid,
+            displayName: currentUser.displayName,
+            photoURL: currentUser.photoURL
           },
           [combinedId + '.date']: serverTimestamp()
         })
