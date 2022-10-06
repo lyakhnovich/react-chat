@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {collection, query, where, getDocs, setDoc, updateDoc, serverTimestamp, doc} from "firebase/firestore";
+import {collection, query, where, getDocs, getDoc, setDoc, updateDoc, serverTimestamp, doc} from "firebase/firestore";
 import {db} from "../firebase";
 import {AuthContext} from "../context/AuthContext";
 
@@ -33,7 +33,7 @@ const Search = () => {
         : user.uid + currentUser.uid
 
     try {
-      const res = await getDocs(db, 'chats', combinedId);
+      const res = await getDoc(doc(db, 'chats', combinedId));
       if (!res.exists()){
         await setDoc(doc(db, 'chats', combinedId), {messages: []});
 
@@ -56,9 +56,10 @@ const Search = () => {
         })
       }
     }catch (err) {
-      setErr(true)
+      // setErr(true)
     }
-
+    setUser(null);
+    setUsername('');
   }
 
   return (
@@ -69,6 +70,7 @@ const Search = () => {
           placeholder='find a user'
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={handleKey}
+          value={username}
         />
       </div>
       {err && <span>User not found!</span>}
