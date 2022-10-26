@@ -3,10 +3,12 @@ import Img from '../img/img.png'
 import Attach from '../img/attach.png'
 import {AuthContext} from "../context/AuthContext";
 import {ChatContext} from "../context/ChatContext";
-import {arrayUnion, updateDoc} from "@firebase/firestore";
+import {arrayUnion, updateDoc, Timestamp} from "@firebase/firestore";
 import {db, storage} from "../firebase";
 import { v4 as uuid } from "uuid";
-import {ref, uploadBytesResumable} from "firebase/storage";
+import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import {updateProfile} from "firebase/auth";
+import {doc, setDoc} from "firebase/firestore";
 
 const Input = () => {
   const [text, setText] = useState('');
@@ -17,7 +19,21 @@ const Input = () => {
   const handleSend = async () => {
     if(img) {
       const storageRef = ref(storage, uuid);
-      const uploadTask = uploadBytesResumable(storageRef, img)
+      // const uploadTask = uploadBytesResumable(storageRef, img)
+      
+
+      await uploadBytesResumable(storageRef, img).then(() => {
+        getDownloadURL(storageRef).then(async(downloadURL) => {
+          messages: arrayUnion({
+            id: uuid,
+            text,
+            senderId: currentUser.uid,
+            date: Timestamp.now(),
+            img: downloadURL
+          })
+        });
+      })
+
     } else {
       await updateDoc(doc(db, 'chats', data.chatId), {
         messages: arrayUnion({
