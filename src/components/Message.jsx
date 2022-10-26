@@ -6,6 +6,7 @@ const Message = ({ message }) => {
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
 
+  console.log( message )
   return (
     <div className='message owner'>
       {/*<div className='messageInfo'>*/}
